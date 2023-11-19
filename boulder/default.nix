@@ -51,8 +51,8 @@ in {
     config = let
       commandSpecs = config.boulder.commands; # might need to make a list
       byGroup = lib.groupBy (x: x.category) commandSpecs;
-      devShell-help = pkgs.writeShellApplication {
-        name = "devshell-help";
+      boulder-help = pkgs.writeShellApplication {
+        name = "boulder-help";
         text = ''
           echo -e "Available commands:\n"
           ${
@@ -86,9 +86,9 @@ in {
         function menu () {
           echo
           echo -e "\033[1;34m>==> ️  '$name' shell\n\033[0m"
-          ${devShell-help}/bin/${devShell-help.name}
+          ${boulder-help}/bin/${boulder-help.name}
           echo
-          echo "(Run '${devShell-help.name}' to display this menu again)"
+          echo "(Run '${boulder-help.name}' to display this menu again)"
           echo
         }
 
@@ -96,11 +96,11 @@ in {
       '';
     in {
       boulder.devShell = pkgs.mkShell {
-        nativeBuildInputs = [devShell-help] ++ (map (c: c.exec) commandSpecs);
+        nativeBuildInputs = [boulder-help] ++ (map (c: c.exec) commandSpecs);
         inherit shellHook;
       };
     };
   });
 
-  _file = ../boulder;
+  _file = ./boulder.nix;
 }
